@@ -79,7 +79,7 @@ class MLP(Module):
             scores = list(map(self, inputs))
             
             # svm "max-margin" loss
-            losses = [(1 + -yi*scorei).tanh() for yi, scorei in zip(yb, scores)]
+            losses = [(1 + -yi*scorei).relu() for yi, scorei in zip(yb, scores)]
             data_loss = sum(losses) * (1.0 / len(losses))
             # L2 regularization
             alpha = 1e-4
