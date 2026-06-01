@@ -46,9 +46,10 @@ class Layer(Module):
         return f"Layer of [{', '.join(str(n) for n in self.neurons)}]"
 
 class MLP(Module):
-    def __init__(self, nin, nouts):
+    def __init__(self, nin, nouts, estimatemodel = None):
         sz = [nin] + nouts
         self.layers = [Layer(sz[i], sz[i+1], nonlin=i!=len(nouts)-1) for i in range(len(nouts))]
+        self.estimatemodel = 'probabilistic' if estimatemodel is None or estimatemodel != 'boundary' else 'boundary' # to decide loss function
 
     def __call__(self, x):
         for layer in self.layers:
@@ -65,8 +66,8 @@ class MLP(Module):
 
         if(train_x is None or train_y is None): raise ValueError("dataset values missing")
         
-        # loss function
-        def loss():
+        # boundary loss function
+        def loss_boundary():
             if batch_size is None:
                 Xb, yb = train_x, train_y
             else:
@@ -91,11 +92,10 @@ class MLP(Module):
 
         for i in range(niters):
             #forward pass
-            total_loss, acc = loss()
-            """
+            if self.estimatemodel == 'boundary' : total_loss, acc = loss_boundary()
+            else:
                 ypred = [self(x) for x in train_x]
-                loss = sum((ygt - yout)**2 for ygt, yout in zip(train_y, ypred))
-            """
+                total_loss = sum((ygt - yout)**2 for ygt, yout in zip(train_y, ypred))
 
             #backward pass
             for p in self.parameters():    # if not used this would accumulate the grdaients from previous step
@@ -108,6 +108,7 @@ class MLP(Module):
             for p in self.parameters():
                 p.data -= lr * p.grad
 
-            print(f"step {i} loss {total_loss.data}, accuracy {acc*100}%")
+            if self.estimatemodel == 'boundary' : print(f"step {i} loss {total_loss.data}, accuracy {acc*100}%")
+            else:   print(f"step {i} loss {total_loss.data}")
 
         return [self(x) for x in train_x]
