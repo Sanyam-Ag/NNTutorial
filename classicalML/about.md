@@ -1,6 +1,7 @@
 # Aim of this sub-directory
 
 To implement classical ML models from scratch including:
+
     1. Linear Regression
     2. Logistic Regression
     3. K-Means
