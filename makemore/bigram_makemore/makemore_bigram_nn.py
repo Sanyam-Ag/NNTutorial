@@ -5,7 +5,7 @@ import torch.nn.functional as F
 alpha = 20
 iters = 100
 
-data = open("data.txt", 'r').read().splitlines()
+data = open("../data.txt", 'r').read().splitlines()
 data_modified_SE = []   #modified data with start and end characters
 for w in data:
     data_modified_SE.append(['.'] + list(w) + ['.'])

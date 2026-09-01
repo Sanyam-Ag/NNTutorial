@@ -3,7 +3,7 @@ import torch
 import matplotlib.pyplot as plt
 
 
-data = open("data.txt", 'r').read().splitlines()
+data = open("../data.txt", 'r').read().splitlines()
 data_modified_SE = []   #modified data with start and end characters
 for w in data:
     data_modified_SE.append(['.'] + list(w) + ['.'])
@@ -107,4 +107,5 @@ print(f'{nlog_likelihood/cnt}')     # the lower the value of negative log likeli
 
         1. Maximize likelihood of data wrt to model parameters : here in this model the probabilities of the bigrams
         2. equivalent to maximizing log likelihood as log is a monotonic function
+        3. minimizing the negative log likelihood
 """
