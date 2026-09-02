@@ -8,6 +8,7 @@ This is a repository created with intention of improving understanding of ML and
         b. Logistic Regression
         c. K-Means
             etc
+    3. Character level model -> makemore
 
 ## Sources
 
